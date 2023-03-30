@@ -1,0 +1,1011 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+use Auth;
+use DB;
+use Redirect;
+use Mail;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\Company;
+use App\Models\EventCategory;
+use App\Models\Performance;
+use App\Models\Page;
+use Session;
+use URL;
+use Cookie;
+use Validator;
+use App\Models\Setting;
+use App\Mail\TeamAddMail;
+
+
+class FrontendController extends Controller
+{
+ private $partner_id;
+
+ public function __construct()
+ {
+        //blockio init
+
+ }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {       
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $theaters = EventCategory::where('eventType','THEATER')->inRandomOrder()->limit(4)->get();
+        $theaters = Event::where('performer_eventType','THEATER')->inRandomOrder()->limit(10)->get();
+        $concert = Event::where('performer_eventType','CONCERT')->inRandomOrder()->limit(4)->get();
+        $concert_events = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $theater_events = Performance::where('eventType','THEATER') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+
+        $top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+        $top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+        $top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+        return view("frontend.index",compact('sports','theaters','concert','top_pic_events','concert_events','theater_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four'));
+    }   
+
+
+    public function getupcommimg()
+    {    
+
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $theaters = EventCategory::where('eventType','THEATER')->inRandomOrder()->limit(4)->get();
+        $theaters = Event::where('performer_eventType','THEATER')->inRandomOrder()->limit(10)->get();
+        $concert = Event::where('performer_eventType','CONCERT')->inRandomOrder()->limit(4)->get();
+        $concert_events =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.event_id','=','events.event_id')
+        ->where('events.performer_eventType', '=' , 'CONCERT')
+        ->first();
+
+
+        $top_pic_events =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.id','=','events.event_id')->limit(4)
+        ->get();
+
+        $EventCategory = EventCategory::all();
+
+
+        return view("frontend.pages.up-comming",compact('sports','theaters','concert','top_pic_events','concert_events','EventCategory'));
+    }
+
+
+
+    public function sports()
+    {
+        if(isset($_GET['id'])){
+            $url = "https://skybox.vividseats.com/services/events?limit=10&sortDir=DESC&categoryId=1";
+        }else{
+            $url = "https://skybox.vividseats.com/services/events?limit=10&sortDir=DESC&eventDateFrom=".date("Y-m-d")."&eventDateTo=".date("Y-m-d", strtotime(" +2 months"))."&eventType=SPORT";
+        } 
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $method = "GET";
+        $sports_events = $this->API_request($url,$method);
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $EventCategory = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        return view("frontend.pages.sports",compact('sports_events','top_pic_events','sports','EventCategory'));
+    }
+
+
+       public function searchGlobal()
+    {
+    
+        return view("frontend.pages.searchTerm");
+    }
+
+
+    function load_data_search(Request $request)
+    {
+
+        if($request->ajax())
+        {
+
+
+          if($request->id > 0)
+          {
+
+              if($request->searchTerm != 'false'){
+                // $searchTerm = $request->searchTerm;
+                $searchTerm = str_replace("+"," ",$request->searchTerm);
+                $data = Performance::where('id', '<', $request->id)
+                ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+                ->where('name', 'LIKE', '%'.$searchTerm.'%') 
+                ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+                ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%')
+                ->orderBy('id', 'DESC')
+                ->limit(10)
+                ->get();
+
+            }
+        }
+        else
+        {
+         
+           // $searchTerm = $request->searchTerm;
+            $searchTerm = str_replace("+"," ",$request->searchTerm);
+           $data = Performance::whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+           ->where('name', 'LIKE', '%'.$searchTerm.'%') 
+           ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+           ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%') 
+           ->orderBy('id', 'DESC')
+           ->limit(10)
+           ->get();
+       
+   }
+   $output = '';
+   $last_id = '';
+
+   if(!$data->isEmpty())
+   {
+       foreach($data as $value)
+       {
+        if($value->mySoldTickets == 1){$mySoldTickets='NOW';}else{$mySoldTickets='OUT';}
+        $output .= '
+        <div class="event-list mt-3">
+        <div class="event-list-left">
+        <div class="location_left">
+        <img class="char-img" src="'.$value->chartUrl.'" alt="">
+        </div>
+        <div class="event_featured_img mt-4 mb-4">
+        <h5>'.$value->name.'</h5>
+        <p>'.$value->keywords.'</p>
+
+        <div class="memorial-park-box">
+        <img class="location_img" src="'.url('/public/frontend/images/location.png').'" alt=""><span
+        class="memorial_park">'.$value->venue_name.'
+        Course &nbsp;<div class="host_text">'.$value->venue_address.'</div></span>
+        <p class="ticketd_sale">Tickets are on sale '.$mySoldTickets.'</p>
+        </div>
+        </div>
+        </div>
+        <div class="event-list-right">
+        <div class="featured_time">
+        <h5><b>'.date("d F", strtotime($value->date)).'</b></h5>
+        <span>'. date("D", strtotime($value->date)).' &nbsp;<img src="'.url('public/frontend/images/dot.png').'" alt=""> &nbsp;'.date("H:i: A", strtotime($value->date)).'</span>
+        </div>
+        <a class="btn_more_events mb-3" href="'.url('/events-ticket').'/'.$value->perf_id.'">Find Tickets</a>
+        </div>
+        </div>
+
+
+        ';
+        $last_id = $value->id;
+    }
+    $output .= '
+    <div id="load_more">
+    <button type="button" name="load_more_button" class="btn_more_events mt-5 mb-3" data-id="'.$last_id.'" id="load_more_button">Load More</button>
+    </div>
+    ';
+}
+else
+{
+   $output .= '
+   <div id="load_more">
+   <p class="text-center">No Data Found</p>
+   </div>
+   ';
+}
+echo $output;
+}
+}
+
+
+
+
+
+
+    public function getconcert($id)
+    {
+        if(isset($id)){
+            $url = "https://skybox.vividseats.com/services/events?limit=100&sortDir=DESC&categoryId=".$id."";
+        }else{
+            $url = "https://skybox.vividseats.com/services/events?limit=5&sortDir=DESC&eventDateFrom=".date("Y-m-d")."&eventDateTo=".date("Y-m-d", strtotime(" +2 months"))."&eventType=SPORT";
+        } 
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $method = "GET";
+        $sports_events = $this->API_request($url,$method);
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $EventCategory = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+
+
+        return view("frontend.pages.sports",compact('sports_events','top_pic_events','sports','EventCategory'));
+    }
+
+
+
+
+    public function top_performer($id)
+    {
+        if(isset($id)){
+            $concert_events = Performance::where('performerId',$id) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+        }else{
+            $concert_events = Performance::where('eventType','CONCERT') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+        }
+
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $concert_banner = Performance::where('eventType','CONCERT') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+         $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+        $top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+
+        return view("frontend.pages.concert",compact('concert_events','top_pic_events','sports','concert_banner','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four'));
+
+
+
+
+    }
+
+
+    public function concerts_performer($id)
+    {
+        if(isset($id)){
+            $events_data = Performance::where('eventType','CONCERT') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('performerId',$id)->inRandomOrder()->limit(10)->get();
+        }else{
+            $events_data = Performance::where('eventType','CONCERT') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+        }
+
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $banner = Performance::where('eventType','CONCERT') ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+         $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+        $top_pick_theater_first = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+        $top_pick_concert_sec = Performance::where('eventType','CONCERT')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+        $top_pick_concert_third = Performance::where('cat_id',23)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+        $top_pick_concert_four = Performance::where('cat_id',62)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+        $concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'CONCERT')
+        ->get();
+
+
+        return view("frontend.pages.performer",compact('events_data','top_pic_events','sports','banner','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four','concert_filter'));
+
+    }
+
+    public function concert()
+    {
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $concert_banner = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        
+        $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+       
+       $top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+
+        $concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'CONCERT')
+        ->get();
+
+
+        return view("frontend.pages.concert",compact('top_pic_events','sports','concert_banner','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four'));
+
+    }
+
+    public function top_pick()
+    {
+
+        $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+        $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+        $concert_banner = Performance::where('eventType','CONCERT')->inRandomOrder()->first();
+         $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+        $top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+        $top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0) ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->first();
+
+
+
+        return view("frontend.pages.concert",compact('top_pic_events','sports','concert_banner','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four'));
+
+    }
+
+
+
+    function load_data(Request $request)
+    {
+
+        if($request->ajax())
+        {
+
+
+          if($request->id > 0)
+          {
+
+              if($request->concertSearch != 'false'){
+                // $searchTerm = $request->concertSearch;
+                 $searchTerm = str_replace("+"," ",$request->concertSearch);
+                $data = Performance::where('eventType','CONCERT')
+                ->where('id', '<', $request->id)
+                ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+                ->where('name', 'LIKE','%'.$searchTerm.'%') 
+                ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+                ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%') 
+                ->orderBy('id', 'DESC')
+                ->limit(10)
+                ->get();
+
+            }else{
+                $data = Performance::where('eventType','CONCERT')->where('id', '<', $request->id)
+                ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+                ->orderBy('id', 'DESC')
+                ->limit(10)
+                ->get();
+            }
+        }
+        else
+        {
+          if($request->concertSearch != 'false'){
+
+           // $searchTerm = $request->concertSearch;
+                            $searchTerm = str_replace("+"," ",$request->concertSearch);
+
+           $data = Performance::where('eventType','CONCERT')
+           ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+           ->where('name', 'LIKE', '%'.$searchTerm.'%') 
+           ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+           ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%') 
+           ->orderBy('id', 'DESC')
+           ->limit(10)
+           ->get();
+
+       }else{
+           $data = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0)
+           ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+           ->orderBy('id', 'DESC')
+           ->limit(10)
+           ->get();
+       }
+   }
+   $output = '';
+   $last_id = '';
+
+   if(!$data->isEmpty())
+   {
+       foreach($data as $value)
+       {
+        if($value->mySoldTickets == 1){$mySoldTickets='NOW';}else{$mySoldTickets='OUT';}
+        $output .= '
+        <div class="event-list mt-3">
+        <div class="event-list-left">
+        <div class="location_left">
+        <img class="char-img" src="'.$value->chartUrl.'" alt="">
+        </div>
+        <div class="event_featured_img mt-4 mb-4">
+        <h5>'.$value->name.'</h5>
+        <p>'.$value->keywords.'</p>
+
+        <div class="memorial-park-box">
+        <img class="location_img" src="'.url('/public/frontend/images/location.png').'" alt=""><span
+        class="memorial_park">'.$value->venue_name.'
+        Course &nbsp;<div class="host_text">'.$value->venue_address.'</div></span>
+        <p class="ticketd_sale">Tickets are on sale '.$mySoldTickets.'</p>
+        </div>
+        </div>
+        </div>
+        <div class="event-list-right">
+        <div class="featured_time">
+        <h5><b>'.date("d F", strtotime($value->date)).'</b></h5>
+        <span>'. date("D", strtotime($value->date)).' &nbsp;<img src="'.url('public/frontend/images/dot.png').'" alt=""> &nbsp;'.date("H:i: A", strtotime($value->date)).'</span>
+        </div>
+        <a class="btn_more_events mb-3" href="'.url('/events-ticket').'/'.$value->perf_id.'">Find Tickets</a>
+        </div>
+        </div>
+
+
+        ';
+        $last_id = $value->id;
+    }
+    $output .= '
+    <div id="load_more">
+    <button type="button" name="load_more_button" class="btn_more_events mt-5 mb-3" data-id="'.$last_id.'" id="load_more_button">Load More</button>
+    </div>
+    ';
+}
+else
+{
+   $output .= '
+   <div id="load_more">
+   <button type="button" name="load_more_button" class="btn btn-info form-control">No Data Found</button>
+   </div>
+   ';
+}
+echo $output;
+}
+}
+
+public function loadMore(Request $request)
+{
+    $users = Performance::where('eventType','CONCERT')->paginate(10);        
+    $data = '';
+    if ($request->ajax()) {
+        foreach ($users as $user) {
+            $data.='<li>'.'Name:'.' <strong>'.$user->name.'</strong><br> venue_name: '.$user->venue_name.'</li>';
+        }
+        return $data;
+    }
+
+    return view('user',compact('users'));
+}
+
+
+public function theaters()
+{
+
+    $theater_events = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->orderBy('date','asc')->get();
+    $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+    $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+    $EventCategory = EventCategory::where('eventType','THEATER')->inRandomOrder()->get();
+
+     $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+    
+    $top_pick_theater_first = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_sec = Performance::where('eventType','CONCERT')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_third = Performance::where('cat_id',23)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_four = Performance::where('cat_id',62)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+    return view("frontend.pages.theater",compact('theater_events','top_pic_events','sports','EventCategory','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four'));
+}
+
+
+function load_data_theaters(Request $request)
+{
+
+    if($request->ajax())
+    {
+      if($request->id > 0)
+      {
+
+          if($request->theaterSearch != 'false'){
+            // $searchTerm = $request->theaterSearch;
+                             $searchTerm = str_replace("+"," ",$request->theaterSearch);
+
+            $data = Performance::where('eventType','THEATER')
+            ->where('id', '<', $request->id)
+            ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+            ->where('name', 'LIKE', '%'.$searchTerm.'%') 
+            ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+            ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%') 
+            ->orderBy('id', 'DESC')
+            ->limit(10)
+            ->get();
+
+        }else{
+            
+         $data = Performance::where('eventType','THEATER')->where('id', '<', $request->id)
+         ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+         ->orderBy('id', 'DESC')
+         ->limit(10)
+         ->get();
+     }
+     
+ }
+ else
+ {
+     if($request->theaterSearch != 'false'){
+
+       // $searchTerm = $request->theaterSearch;
+                                    $searchTerm = str_replace("+"," ",$request->theaterSearch);
+
+       $data = Performance::where('eventType','THEATER')
+       ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+       ->where('name', 'LIKE', '%'.$searchTerm.'%') 
+       ->orWhere('venue_name', 'LIKE', '%'.$searchTerm.'%') 
+       ->orWhere('venue_address', 'LIKE', '%'.$searchTerm.'%')
+       ->orderBy('id', 'DESC')
+       ->limit(10)
+       ->get();
+
+   }else{
+       $data = Performance::where('eventType','THEATER')->where('ticketCount','!=',0)
+       ->whereDate('date', '>=', date('Y-m-d')."T00:00:00")
+       ->orderBy('id', 'DESC')
+       ->limit(10)
+       ->get();
+       
+   }
+}
+$output = '';
+$last_id = '';
+
+if(!$data->isEmpty())
+{
+   foreach($data as $value)
+   {
+    if($value->mySoldTickets == 1){$mySoldTickets='NOW';}else{$mySoldTickets='OUT';}
+    $output .= '
+    <div class="event-list mt-3">
+    <div class="event-list-left">
+    <div class="location_left">
+    <img class="char-img" src="'.$value->chartUrl.'" alt="">
+    </div>
+    <div class="event_featured_img mt-4 mb-4">
+    <h5>'.$value->name.'</h5>
+    <p>'.$value->keywords.'</p>
+
+    <div class="memorial-park-box">
+    <img class="location_img" src="'.url('/public/frontend/images/location.png').'" alt=""><span
+    class="memorial_park">'.$value->venue_name.'
+    Course &nbsp;<div class="host_text">'.$value->venue_address.'</div></span>
+    <p class="ticketd_sale">Tickets are on sale '.$mySoldTickets.'</p>
+    </div>
+    </div>
+    </div>
+    <div class="event-list-right">
+    <div class="featured_time">
+    <h5><b>'.date("d F", strtotime($value->date)).'</b></h5>
+    <span>'. date("D", strtotime($value->date)).' &nbsp;<img src="'.url('public/frontend/images/dot.png').'" alt=""> &nbsp;'.date("H:i: A", strtotime($value->date)).'</span>
+    </div>
+    <a class="btn_more_events mb-3" href="'.url('/events-ticket').'/'.$value->perf_id.'">Find Tickets</a>
+    </div>
+    </div>
+
+
+    ';
+    $last_id = $value->id;
+}
+$output .= '
+<div id="load_more">
+<button type="button" name="load_more_button" class="btn_more_events mt-5 mb-3" data-id="'.$last_id.'" id="load_more_button">Load More</button>
+</div>
+';
+}
+else
+{
+   $output .= '
+   <div id="load_more">
+   <button type="button" name="load_more_button" class="btn btn-info form-control">No Data Found</button>
+   </div>
+   ';
+}
+echo $output;
+}
+}
+
+
+
+
+public function theater_performance($id)
+{
+    if(isset($id)){
+        $events_data = Performance::where('eventType','THEATER')->where('performerId',$id)->inRandomOrder()->limit(10)->get();
+    }else{
+        $events_data = Performance::where('eventType','THEATER')->inRandomOrder()->limit(10)->get();
+    }
+    $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+    $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+    $EventCategory = EventCategory::where('eventType','THEATER')->inRandomOrder()->get();
+    $banner = Performance::where('eventType','THEATER')->inRandomOrder()->first();
+
+     $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+    $top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+    $concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'THEATER')
+        ->get();
+
+    return view("frontend.pages.performer",compact('events_data','top_pic_events','sports','EventCategory','slider_events','banner','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four','concert_filter'));
+}
+
+public function getcateconcert($id)
+{
+
+if(isset($id)){
+    $events_data = Performance::where('cat_id',$id)->inRandomOrder()->limit(10)->get();
+}else{
+    $events_data = Performance::where('eventType','CONCERT')->inRandomOrder()->limit(10)->get();
+}
+$catName = EventCategory::where('cat_id',$id)->inRandomOrder()->first();
+
+$top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+$sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+$EventCategory = EventCategory::where('eventType','CONCERT')->inRandomOrder()->get();
+$concert_banner = Performance::where('eventType','CONCERT')->inRandomOrder()->first();
+$slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+
+$banner = Performance::where('eventType','CONCERT')->inRandomOrder()->first();
+$top_pick_theater_first = Performance::where('eventType','THEATER')->where('ticketCount','!=',0)->inRandomOrder()->first();
+$top_pick_concert_sec = Performance::where('eventType','CONCERT')->where('ticketCount','!=',0)->inRandomOrder()->first();
+$top_pick_concert_third = Performance::where('cat_id',23)->where('ticketCount','!=',0)->inRandomOrder()->first();
+$top_pick_concert_four = Performance::where('cat_id',62)->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+$concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'THEATER')
+        ->get();
+
+
+
+return view("frontend.pages.performer",compact('events_data','top_pic_events','sports','EventCategory','concert_banner','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four','banner','concert_filter','catName'));
+
+
+}
+
+public function getcatetheaters($id)
+{
+
+
+    if(isset($id)){
+        $events_data = Performance::where('cat_id',$id)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+    }else{
+        $events_data = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->orderBy('date', 'asc')->get();
+    }
+    $catName = EventCategory::where('cat_id',$id)->inRandomOrder()->first();
+    $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+    $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+    $EventCategory = EventCategory::where('eventType','THEATER')->inRandomOrder()->get();
+
+     $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+
+    $banner = Performance::where('eventType','THEATER')->inRandomOrder()->first();
+    $top_pick_theater_first = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_sec = Performance::where('eventType','CONCERT')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_third = Performance::where('cat_id',23)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_four = Performance::where('cat_id',62)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+    $concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'THEATER')
+        ->get();
+
+    return view("frontend.pages.performer",compact('events_data','top_pic_events','sports','EventCategory','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four','banner','concert_filter','catName'));
+
+
+}
+
+
+
+
+
+
+public function getCategorySlider()
+{
+
+    $EventCategory = EventCategory::all();
+    return view("frontend.pages.category-slider",compact('EventCategory'));
+}
+
+public function performes_filter()
+{
+      if(isset($_GET['venue-name'])){
+        $events_data = Performance::where('cat_id',$_GET['venue-name'])->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+    }
+
+     if(isset($_GET['venue-city'])){
+        $events_data = Performance::where('cat_id',$_GET['venue-city'])->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->get();
+    }else{
+        $events_data = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->inRandomOrder()->limit(10)->orderBy('date', 'asc')->get();
+    }
+    $sports = EventCategory::where('eventType','SPORT')->inRandomOrder()->get();
+    $top_pic_events = Event::where('provider_id',5)->limit(4)->get();
+    $EventCategory = EventCategory::where('eventType','THEATER')->inRandomOrder()->get();
+     $slider_events =   DB::table('event_categories')
+        ->select('event_categories.id','event_categories.name','event_categories.name as cat_name','event_categories.*','performances.*')
+        ->join('performances','performances.cat_id','=','event_categories.cat_id')
+        ->where('performances.eventType', '=' , 'THEATER')
+        ->orWhere('performances.eventType', '=' , 'CONCERT')
+        ->get();
+    $banner = Performance::where('eventType','THEATER')->inRandomOrder()->first();
+    $top_pick_theater_first = Performance::where('eventType','THEATER')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_sec = Performance::where('eventType','CONCERT')->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_third = Performance::where('cat_id',23)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+    $top_pick_concert_four = Performance::where('cat_id',62)->whereDate('date', '>=', date('Y-m-d')."T00:00:00")->where('ticketCount','!=',0)->inRandomOrder()->first();
+
+    $concert_filter =   DB::table('events')
+        ->select('events.id','events.name','events.name as eventname','performances.perf_id','events.*','performances.*')
+        ->join('performances','performances.performerId','=','events.sk_performer_id')
+        ->where('events.performer_eventType', '=' , 'THEATER')
+        ->get();
+
+    return view("frontend.pages.performer",compact('events_data','top_pic_events','sports','EventCategory','slider_events','top_pick_theater_first','top_pick_concert_sec','top_pick_concert_third','top_pick_concert_four','banner','concert_filter'));
+}
+
+
+
+
+public function getEventCategory()
+{
+  $url = "https://skybox.vividseats.com/services/events/categories";
+  $method = "GET";
+  $categories = $this->API_request($url,$method);
+
+  if($categories){
+
+    foreach ($categories as $key => $value) {
+
+        $category = new EventCategory;
+        $category->cat_id = $value->id;
+        $category->name = $value->name;
+        $category->eventType = $value->eventType;
+        $category->status = 1;
+        $category->save();
+    }
+
+}
+     
+echo "Done";
+}
+
+public function get_page($slug)
+{
+   
+ $getPage = Page::where('slug',$slug)->first();
+
+ 
+ return view("frontend.pages.page",compact('getPage'));
+}
+
+
+public function get_events_ticket($id)
+{
+ $getPerformance = Performance::where('perf_id',$id)->first();
+ $url = "https://skybox.vividseats.com/services/tickets?eventId=".$id;
+ $method = "GET";
+ $tickets = $this->API_request($url,$method);
+  // echo "<pre>";
+  // print_r($tickets);
+  // die;
+ return view("frontend.pages.event-tickets",compact('tickets','getPerformance'));
+}
+
+
+
+
+
+
+
+
+public function API_request($url,$method){
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+
+    $headers = array();
+    $headers[] = 'Accept: application/json';
+    $headers[] = 'X-Application-Token: 98e15ea8-c8a1-470f-96b1-7a8e8b123da5';
+    $headers[] = 'X-Api-Token: e0634966-762c-4e52-91ca-9cf2b5dfb9a4';
+    $headers[] = 'X-Account: 2072';
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    }
+    curl_close($ch);
+
+    $dataArray = json_decode($result);
+    return $dataArray;
+
+}
+
+
+
+
+
+public function sendMail()
+{
+    $to= "webtest41@gmail.com";
+    $info = array(
+        'Token' => "asdfas"
+    );
+
+    Mail::send('name', $info, function ($message)
+    {
+        $message->to( "webtest41@gmail.com", 'testhere')
+        ->subject('test mail');
+        $message->from('dev@test.com', 'Alex');
+    });
+
+
+       // Mail::to('webtest193@gmail.com')->send(new TeamAddMail());
+       // if (Mail::failures()) {
+       //  echo 'Sorry! Please try again latter';
+       //  }else{
+       //     echo 'Great! Successfully send in your mail';
+       //  }   
+    die();
+}
+
+
+
+
+
+function doRegister(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+            'email' => 'required|email|unique:users,email',   // required and email format validation
+            'password' => 'required|min:8',
+
+        ]); // create the validations
+        if ($validator->fails())   //check all validations are fine, if not then redirect and show error messages
+        {
+            return response()->json($validator->errors(),422);  
+            // validation failed return back to form
+
+        } else {
+            //validations are passed, save new user in database
+            $User = new User;
+            $User->name = $request->name;
+            $User->email = $request->email;
+            $User->zip = $request->zip;
+            $User->role = 1;
+            $User->password = bcrypt($request->password);
+            $User->save();
+
+          //  $imageFiles = $request->file('image');
+
+            // if($imageFiles){
+            //     $name=time().'-'.$imageFiles->getClientOriginalName();
+            //     $imageFiles->move(public_path().'/backend/images/',$name);   
+
+            //     $companyLogo=$name;
+            // }else{
+            //     $companyLogo="";
+            // }     
+            Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+            return response()->json(["status"=>true,"msg"=>"You have successfully registered, Login to access your dashboard","redirect_location"=>url("admin")]);  
+
+        }
+    }
+
+
+
+
+
+    public function Aiitchtix_API_request($url,$method){
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => $method,
+          CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FpaXRjaHRpeC5uZXQvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzIwMzg5NjYsImV4cCI6MTY3MjA4MjE2NiwibmJmIjoxNjcyMDM4OTY2LCJqdGkiOiJmenBtbHFLR1N4Mk12ZFhrIiwic3ViIjoiMTEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6iwb-KcNi7o4K-2FM6ErNoY9NMM0IDQk8G4ySNrM2xE'
+        ),
+      ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return json_decode($response);
+    }
+
+
+
+
+
+    public function getPerformance()
+    {
+
+       $event = Event::all();
+       foreach ($event as $key => $value) {     
+
+         $url = "https://aiitchtix.net/api/events/".$value->event_id;
+         $method = "GET";
+         $perfListing = $this->Aiitchtix_API_request($url,$method);
+
+         if($perfListing){
+            $perfListingData = json_decode(json_encode($perfListing), true);
+
+
+            foreach ($perfListingData['performances'] as $sub_key => $sub_value) {
+                $check_Perf = Performance::where('perf_id',$sub_value['id'])->first();
+                if($check_Perf){
+                   $event = Performance::find($check_Perf->id);
+               }else{
+
+                $event = new Performance;
+            }
+            $event->cat_id = isset($sub_value['inventory'][0]['event']['performer']['category']['id']) ? $sub_value['inventory'][0]['event']['performer']['category']['id'] : '';
+
+            $event->perf_id = $sub_value['id'];
+            $event->ref_id = $sub_value['ref_id'];
+            $event->name = $sub_value['name'];
+            $event->description = $sub_value['description'];
+            $event->date = $sub_value['date'];
+            $event->event_id = $sub_value['event_id'];
+            $event->capacity = $sub_value['capacity'];
+            $event->sk_event_id = $sub_value['sk_event_id'];
+            $event->skybox_event_id = $sub_value['skybox_event_id'];
+            $event->num_sold = $sub_value['num_sold'];
+            $event->skybox_status = $sub_value['skybox_status'];
+            $event->save();    
+        }
+    }
+
+}
+}
+
+
+
+}

@@ -1,0 +1,368 @@
+@extends('layouts.frontend.master')
+@section('content')
+        <!-- MOBILE HEADER END -->
+    <!-- banner section starts -->
+    <section class="banner">
+        <div class="banner-image">
+            <img class="w-100" src="{{ asset('public/frontend/images/bg_home.png') }}" alt="Banner Image">
+        </div>
+        <div class="banner-caption">
+            <div class="container">
+                <div class="banner-date">
+                    <img src="{{ asset('public/frontend/images/calender-icon.svg') }}" alt="Calender Icon"> <span>16 - 23 January, 2023</span>
+                </div>
+                <h1 class="banner-title">
+                    Folk Musical<br>
+                    Fest <span class="fest-year">2023</span>
+                </h1>
+                <div class="banner-date">
+                    <img src="{{ asset('public/frontend/images/calender-icon.svg') }}" alt="Calender Icon"> <span>33 Bedford St. Wyandanch, New York
+                        (NY)</span>
+                </div>
+
+                <div class="cap-buy-tickets">
+                    <span>Buy Tickets, Earn Rewards</span>
+                </div>
+                <div class="get_tickets_sports">
+                    <a class="btn_event mt-3" href="">Get Tickets</a>
+                </div> 
+            </div>
+        </div>
+    </section>
+    <!-- banner section ends -->
+    <!-- Our top pick work start here -->
+    <section class="our-top-work mt-5">
+        <div class="our_top_picks">
+            <h3 class="text-center">Our Top Picks This Week</h3>
+        </div>
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="card">
+                        <div class="card_box_img">
+                            <img src="{{ asset('public/frontend/images/Rectangle 2498.png') }}" class="card-img-top" alt="...">
+                            <a class="get_ticket_home" href="#">Get Tickets</a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><b>World Series: Philadelphia Phillies at Houston Astros (Game 6 -
+                                    Home</b></h5>
+                            <p class="card-text text_time">November 6th <span class="time_card text-dark">&nbsp; .&nbsp;
+                                    7:30pm</span></p>
+                            <p class="card-park-text">Minute Maid Park</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card">
+                        <div class="card_box_img">
+                            <img src="{{ asset('public/frontend/images/grp-home.png') }}" class="card-img-top" alt="...">
+                            <a class="get_ticket_home" href="#">Get Tickets</a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><b>World Series: Philadelphia Phillies at Houston Astros (Game 6 -
+                                    Home</b></h5>
+                            <p class="card-text text_time">November 6th <span class="time_card text-dark">&nbsp; .&nbsp;
+                                    7:30pm</span></p>
+                            <p class="card-park-text">Minute Maid Park</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="card">
+                        <div class="card_box_img">
+                            <img src="{{ asset('public/frontend/images/our_team1.png') }}" class="card-img-top" alt="...">
+                            <a class="get_ticket_home" href="#">Get Tickets</a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><b>World Series: Philadelphia Phillies at Houston Astros (Game 6 -
+                                    Home</b></h5>
+                            <p class="card-text text_time">November 6th <span class="time_card text-dark">&nbsp; .&nbsp;
+                                    7:30pm</span></p>
+                            <p class="card-park-text">Minute Maid Park</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card">
+                        <div class="card_box_img">
+                            <img src="{{ asset('public/frontend/images/our_team2.png') }}" class="card-img-top" alt="...">
+                            <a class="get_ticket_home" href="#">Get Tickets</a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><b>Black Panther: Wakanda Forever</b></h5>
+                            <p class="card-text text_time">November 6th <span class="time_card text-dark">&nbsp; .&nbsp;
+                                    7:30pm</span></p>
+                            <p class="card-park-text">Minute Maid Park</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Our top pick work end-->
+    <!-- our company start -->
+    <section class="our_company">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 company_info">
+                    <div class="about_our_compny">
+                        <img src="{{ asset('public/frontend/images/about-us.png') }}" alt="" width="100%">
+                    </div>
+                </div>
+                <div class="col-md-6 company_info">
+                    <div class="about_us_content mt-5">
+                        <div class="about_one_text">
+                            <div class="rectangle">
+                            </div><span>About Us</span>
+                        </div>
+                        <div class="about_compny pt-1">
+                            <h3>About The Company</h3>
+                            <p class="pt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis
+                                molestie, dictum
+                                est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem
+                                sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit,
+                                sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia
+                                nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac
+                                scelerisque ante pulvinar.</p>
+                        </div>
+                        <a class="btn_event mt-3" href="#">Browse Events</a>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- our company end -->
+    <!--  Discover what’s next start  -->
+    <section class="discover_whats_next">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="whats_next_section">
+                        <h3 class="text-center">Discover what’s next</h3>
+                        <nav>
+                            <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                    aria-selected="true">Top Picks</button>
+                                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                                    aria-selected="false">Sports</button>
+                                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
+                                    aria-selected="false">Concerts</button>
+                                <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled"
+                                    aria-selected="false">Theater</button>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                        tabindex="0">
+                        <div class="row pt-3">
+                            <div class="col-md-3 col-sm-6 company_info_tab">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team1.png') }}" alt="image">
+                                    <h5 class="text-light">Taylor Swift</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 company_info_tab">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team2.png') }}" alt="image">
+                                    <h5 class="text-light">World Series</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 company_info_tab">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team3.png') }}" alt="image">
+                                    <h5 class="text-light">FIFA 2022 QATAR</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 company_info_tab">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team4.png') }}" alt="image">
+                                    <h5 class="text-light">Black Panther: Wakanda Forever</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                        tabindex="0">
+                        <div class="row pt-3">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team1.png') }}" alt="image">
+                                    <h5 class="text-light">Taylor Swift</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team2.png') }}" alt="image">
+                                    <h5 class="text-light">World Series</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team3.png') }}" alt="image">
+                                    <h5 class="text-light">FIFA 2022 QATAR</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team4.png') }}" alt="image">
+                                    <h5 class="text-light">Black Panther: Wakanda Forever</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
+                        tabindex="0">
+                        <div class="row pt-3">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team1.png') }}" alt="image">
+                                    <h5 class="text-light">Taylor Swift</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team2.png') }}" alt="image">
+                                    <h5 class="text-light">World Series</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team3.png') }}" alt="image">
+                                    <h5 class="text-light">FIFA 2022 QATAR</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team4.png') }}" alt="image">
+                                    <h5 class="text-light">Black Panther: Wakanda Forever</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab"
+                        tabindex="0">
+                        <div class="row pt-3">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team1.png') }}" alt="image">
+                                    <h5 class="text-light">Taylor Swift</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team2.png') }}" alt="image">
+                                    <h5 class="text-light">World Series</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team3.png') }}" alt="image">
+                                    <h5 class="text-light">FIFA 2022 QATAR</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="discover_tab_one">
+                                    <img src="{{ asset('public/frontend/images/team4.png') }}" alt="image">
+                                    <h5 class="text-light">Black Panther: Wakanda Forever</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn_more_events mt-5 mb-3" href="#">Find More Events</a>
+                </div>
+
+
+                <div class="col-md-6"></div>
+            </div>
+        </div>
+    </section>
+    <!--  Discover what’s next end  -->
+    <!-- about the gurantee -->
+    <section class="about_gaurantee mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 pt-5">
+                    <p class="text-light">100% Buyer Guarantee <br>Designed to give you peace of mind.</p>
+                </div>
+                <div class="col-md-4 pt-5">
+                    <p class="text-light">Safe & secure transactions <br>Your private and personal information should
+                        remain private and personal.</p>
+                    <h6 class="text-light">Learn more about our guarantee <span><i class="fa fa-chevron-right"
+                                aria-hidden="true"></i>
+                        </span></h6>
+                </div>
+                <div class="col-md-4 pt-5 pb-5">
+                    <p class="text-light">Full-service customer care<br>You deserve hassle-free assistance from start to
+                        finish.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- blog_cards -->
+    <section class="blog_cards">
+        <div class="container">
+            <div class="row blogs_row pt-5 pb-5">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card">
+                        <img src="{{ asset('public/frontend/images/Rectangle 2498.png') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">NFL Football</h5>
+                            <h6 class="card-text"><b>The Most Popular NFL Teams by County</b></h6>
+                            <p class="read_more">Read More <span><i class="fa fa-chevron-right"
+                                        aria-hidden="true"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card">
+                        <img src="{{ asset('public/frontend/images/img-1.png') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">All Concerts</h5>
+                            <h6 class="card-text"><b>2023 Concert Tours: Predicting the Top 2023 Concerts and Tours</b>
+                            </h6>
+                            <p class="read_more">Read More <span><i class="fa fa-chevron-right"
+                                        aria-hidden="true"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card">
+                        <img src="{{ asset('public/frontend/images/img-2.png') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Theaters</h5>
+                            <h6 class="card-text"><b>Black Panther: Wakanda Forever Coming Into Theaters</b></h6>
+                            <p class="read_more">Read More <span><i class="fa fa-chevron-right"
+                                        aria-hidden="true"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- buy tickects -->
+    <div class="section buy_tickets">
+        <div class="container">
+            <div class="row">
+                <div class="buy_tickets_title pt-5 pb-5">
+                    <h3 class="text-light text-center">Buy 10 tickets, get the 11th on us.</h3>
+                    <p class="text-light text-center">Discover the most rewarding way to buy tickets. It's easy. Just
+                        collect, redeem, repeat.</p>
+                    <div class="btn_earning">
+                        <a class="btn btn-earn" href="#">Start Earning</a>
+                        <a class="btn btn-earns" href="#">Browes Events</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer section -->
+@stop

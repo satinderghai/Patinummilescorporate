@@ -1,0 +1,507 @@
+a {
+    color:#00538c;
+}
+a:hover{
+    color:#26a9e0;
+}
+.day-time-to :hover {
+    color: #fff;
+}
+.logo-img {
+    max-height: 52px;
+}
+.form-control::placeholder, .dual-listbox .dual-listbox__search::placeholder, div.dataTables_wrapper div.dataTables_filter input::placeholder {
+	color: #cd2930;
+	opacity: 0.4;
+}
+.nk-head {
+    padding: 15px 0;
+}
+.nk-head .menus {
+    display: flex;
+    justify-content: flex-end;
+}
+.nk-head .menus li{
+    margin-left:10px;
+}
+.nk-head .menus a{
+    color:#000;
+}
+.nk-head .menus a:hover{
+    color:#00538c;
+}
+.form-card{
+    background-color: #f9f9f9;
+    border:1px solid #efefef;
+    padding: 30px;
+}
+.nk-block-title{
+    color:#00538c;
+}
+.form-card .form-group {
+    margin-bottom: 0.5rem;
+}
+.form-card .form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #344357;
+    margin-bottom: 0.3rem;
+}
+.my-n1 {    margin-right: 5.8125rem;
+}
+.user-avatar img {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+.theme-btn{
+    background-color:#00538c;
+    color:#fff;
+}
+/*a.btn.btn-outline-light.bg-white.d-none.d-sm-inline-flex {
+    width: 167px;
+    text-align: center;
+    justify-content: center;
+}*/
+.theme-btn:hover{
+    background-color:#26a9e0;
+    color:#fff;
+}
+.text_code {
+    text-align: right;
+    font-size: 20px;
+}
+.form-control:focus, .dual-listbox .dual-listbox__search:focus, div.dataTables_wrapper div.dataTables_filter input:focus {
+    border-color: #dbdfea;
+    box-shadow: none;
+}
+.nk-footer {
+    background-color: #f5f7fc;
+}
+.fa {
+    font: normal normal normal 14px/1 FontAwesome!important;
+}
+.nk-footer .nav-link{
+    color:#000;
+}
+.nk-footer .nav-link:hover{
+    color:#00538c;
+}
+.form-icon .icon {
+    color: #00538c;
+}
+.fw-social {
+    display: flex;
+    justify-content: end;
+}
+.fw-social a {
+    height: 35px;
+    width: 35px;
+    border-radius: 100px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #dddddd;
+    margin-left: 8px;
+}
+.nk-menu-heading .overline-title {
+    color: #626262;
+}
+.nk-sidebar-menu .fa, .nk-sidebar-menu .fa-solid {
+    font: normal normal normal 20px/1 FontAwesome!important;
+}
+
+.nk-sidebar-menu .nk-menu-link, .nk-menu-icon {
+    color: #626262;
+}
+
+/*.is-light .nk-menu-link:hover, .is-light .active > .nk-menu-link {
+    color: #fff;
+    background: #00538c;
+}*/
+
+.is-light .nk-menu-link:hover .nk-menu-icon, .is-light .active > .nk-menu-link .nk-menu-icon{
+    color: #fff;
+}
+
+.has-sub.active > .nk-menu-toggle:after, .is-light .nk-menu-link:hover:after{
+    color: #fff;
+}
+
+.card-form .form-group {
+    margin-bottom: 15px;
+}
+
+.full-height {
+    min-height: calc(100vh - 252px);
+}
+
+.page-item.active .page-link {
+    background-color: #00538c;
+    border-color: #00538c;
+}
+
+.mo-logo{
+    width: 70px;
+}
+
+.comp-logo-wrap {
+    width: 100px;
+    border-radius: 100%;
+    position:relative;
+}
+
+.comp-logo-wrap .comp-logo {
+    border-radius: 100%;
+}
+
+.edit-btn {
+    position: absolute;
+    font-size: 20px;
+    right: 10px;
+    background-color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    display: inline-flex;
+    border: 1px solid #ccc;
+    justify-content: center;
+    box-shadow: none;
+    align-items: center;
+    bottom: -7px;
+}
+
+.find-booking .form-icon{
+    right: 0;
+}
+
+.find-booking .form-icon + .form-control{
+    padding-right: calc(1rem + 24px);
+    padding-left:1rem;
+}
+
+.find-booking .form-group {
+    margin-bottom: 15px;
+}
+
+.find-btn{
+    margin-top: 30.5px;
+}
+
+.br-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: #00538c;
+}
+
+.br-tab {
+	background: rgb(240,240,240);
+	background: linear-gradient(0deg, rgba(240,240,240,1) 0%, rgba(255,255,255,1) 100%);
+	border-radius: 5px;
+	padding: 10px;
+	color: #5c5c5c;
+	border: 1px solid #e3e3e3;
+    display:flex;
+    align-items:center;
+    margin-bottom: 15px;
+    transition: 0.7s;
+}
+
+.br-tab:last-child{
+    margin-bottom: 0px;
+}
+
+.br-tab:hover {
+    background: #00538c;
+    transition: 0.7s;
+    color: #fff;
+}
+
+.brt-left {
+	width: 50%;
+}
+
+.brt-center, .brt-right {
+	width: 25%;
+}
+
+.br-tab .day-time {
+    align-items: center;
+}
+
+.br-tab p {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 0px;
+}
+
+.br-tab .day-time-from{
+    text-align:right;
+    padding:5px;
+}
+
+.br-tab .day-time-track{
+    padding:5px;
+}
+
+.br-tab .day-time-to {
+    padding:5px;
+}
+
+.br-tab .br-route {
+    text-align: center;
+    width: 30%;
+}
+
+.br-route p{
+    line-height: 15px;
+    font-size: 12px;
+}
+
+.br-tab .brt-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.br-tab .br-time {
+    margin: 0 10px;
+}
+
+.br-route .image-bg {
+	background-color: #e7e7e7;
+	border-radius: 100px;
+	width: 40px;
+	height: 40px;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    margin-bottom: 5px;
+    color:#000;
+}
+
+.br-tab:hover .br-route .image-bg {
+    color: #00538c;
+}
+
+.brt-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.brt-right .price {
+    font-size: 20px;
+    margin-right: 15px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 20px;
+}
+
+.br-tab:hover .theme-btn {
+    background-color: #fff;
+    color: #00538c;
+}
+
+/*=== Multi step form css start ===*/
+
+#msform {
+    text-align: center;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+#msform fieldset {
+    background-color: #f9f9f9;
+    border: 1px solid #efefef;
+    padding: 30px;
+    position: unset!important;
+    width: 100%;
+    /*left: 50%!important;
+    transform: translateX(-50%)!important;*/
+}
+
+#msform .form-group {
+    margin-bottom: 15px; 
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {  
+    display: none;
+}
+
+/*buttons*/
+#msform .action-button {
+    width: 100px;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #aCbEd0;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #aCbEd0;
+}
+
+/*headings*/
+.fs-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+}
+
+#progressbar li {
+    list-style-type: none;
+    color: #00538c;
+    text-transform: uppercase;
+    font-size: 13px;
+    width: 33.33%;
+    float: left;
+    font-weight: 700;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+#progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    display: block;
+    font-size: 12px;
+    color: #333;
+    background: white;
+    border-radius: 25px;
+    margin: 0 auto 10px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: -50%;
+    top: 12px;
+    z-index: -1; /*put it behind the numbers*/
+}
+
+#progressbar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps blue*/
+/*The number of the step and the connector before it = blue*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #00538c;
+    color: white;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.call-box {
+    display: inline-block;
+    padding: 5px 35px;
+    border-radius: 3px;
+    border: 1px solid #d7d5d5;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.call-up {
+    display: flex;
+    align-items: center;
+}
+
+.call-box:focus {
+    background: #00538c;
+    color: #fff;
+    border-color:#00538c;
+}
+
+.call-up .call-field {
+    margin: 0 10px;
+    width: 80px;
+    text-align: center;
+}
+
+#msform hr {
+  color: #9d9d9d;
+  }
+#msform .error {
+    text-align: left;
+}
+
+#msform .wcall-row {
+    display: flex;
+}
+
+.ui-code{
+    float: right;
+    color: #00538c;
+}
+
+@media(max-width:767px){
+    .call-box {
+     padding: 5px 15px;
+}
+}
+
+@media(max-width:576px){
+.wcall-row {
+    flex-direction: column;
+}
+.call-box {
+    margin-right: 0;
+    max-width: 50%;
+    margin-bottom: 10px;
+}
+}
+
+/*=== Multi step form css end ===*/

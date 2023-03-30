@@ -1,0 +1,73 @@
+[13-Dec-2022 11:15:10 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home/ir3gqxlxb3fx/public_html/dev/adminer.php on line 179
+[13-Dec-2022 11:15:12 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home/ir3gqxlxb3fx/public_html/dev/adminer.php on line 179
+[13-Dec-2022 11:15:13 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home/ir3gqxlxb3fx/public_html/dev/adminer.php on line 179
+[13-Dec-2022 11:15:13 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home/ir3gqxlxb3fx/public_html/dev/adminer.php on line 311
+[27-Dec-2022 11:09:36 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/Frontend/FrontendController.php on line 149
+[27-Dec-2022 11:10:00 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/Frontend/FrontendController.php on line 149
+[06-Jan-2023 09:33:59 UTC] PHP Fatal error:  Cannot use Session as Session because the name is already in use in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/Frontend/FrontendController.php on line 17
+[18-Jan-2023 10:39:45 UTC] PHP Fatal error:  Cannot use App\Models\Booking as Booking because the name is already in use in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/AdminController.php on line 12
+[16-Feb-2023 12:48:12 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 473
+[01-Mar-2023 12:10:49 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:10:50 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:10:50 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:25:48 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:25:48 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:25:48 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:27:42 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:27:42 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[01-Mar-2023 12:27:42 UTC] PHP Fatal error:  Uncaught Error: Object of class Symfony\Component\HttpFoundation\InputBag could not be converted to string in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php:212
+Stack trace:
+#0 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\backend\BookingController->booking_autocomplete_search(Object(Illuminate\Http\Request))
+#1 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\Routing\Controller->callAction('booking_autocom...', Array)
+#2 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(262): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\backend\BookingController), 'booking_autocom...')
+#3 /home/ir3gqxlxb3fx/public_html/dev/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\Routing\Route->runController()
+# in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/backend/BookingController.php on line 212
+[02-Mar-2023 12:00:53 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/ir3gqxlxb3fx/public_html/dev/app/Http/Controllers/Frontend/FrontendController.php on line 493

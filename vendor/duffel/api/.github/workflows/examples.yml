@@ -1,0 +1,58 @@
+name: Examples
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  code_examples:
+    name: Code Examples
+
+    runs-on: ubuntu-latest
+
+    env:
+      DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.1
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run exploring data example
+        run: php ./examples/exploring-data.php
+
+      - name: Run search and book example
+        run: php ./examples/search-and-book.php
+
+      - name: Run book and change example
+        run: php ./examples/book-and-change.php
+
+      - name: Run book hold order example
+        run: php ./examples/book-hold-order.php
+
+      - name: Run book with extra baggage example
+        run: php ./examples/book-with-extra-baggage.php
+
+      - name: Run book with seat example
+        run: php ./examples/book-with-seat.php
